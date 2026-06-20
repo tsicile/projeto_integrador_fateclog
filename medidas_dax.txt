@@ -1,0 +1,47 @@
+Qtd Entregas = COUNTROWS(fato_entrega)
+
+Clientes Atendidos = DISTINCTCOUNT(fato_entrega[sk_cliente])
+
+Peso Total (kg) = SUM(fato_entrega[peso_carga_kg])
+
+Volumes Totais = SUM(fato_entrega[quantidade_volumes])
+
+Entregas no Prazo =
+CALCULATE(
+    COUNTROWS(fato_entrega),
+    fato_entrega[entrega_no_prazo] = 1
+)
+
+% No Prazo (OTD) = DIVIDE([Entregas no Prazo], [Qtd Entregas])
+
+% Atrasadas = 1 - [% No Prazo (OTD)]
+
+Atraso Médio (h) = AVERAGE(fato_entrega[atraso_horas])
+
+Tempo Médio Real (h) = AVERAGE(fato_entrega[tempo_real_horas])
+
+Qtd Canceladas =
+CALCULATE(
+    COUNTROWS(fato_entrega),
+    fato_entrega[status_entrega] = "Cancelada"
+)
+
+Receita Frete = SUM(fato_entrega[valor_frete])
+
+Custo Combustível = SUM(fato_entrega[custo_combustivel])
+
+Margem de Frete = SUM(fato_entrega[margem_frete])
+
+Margem % = DIVIDE([Margem de Frete], [Receita Frete])
+
+Frete Médio = AVERAGE(fato_entrega[valor_frete])
+
+Custo por KM Médio = AVERAGE(fato_entrega[custo_por_km])
+
+Qtd Avarias =
+CALCULATE(
+    COUNTROWS(fato_entrega),
+    fato_entrega[avaria] = 1
+)
+
+Taxa de Avaria % = DIVIDE([Qtd Avarias], [Qtd Entregas])
